@@ -1,0 +1,27 @@
+{
+  "name": "rest-api",
+  "version": "1.0.0",
+  "description": "a node.js restful api project (simple shop API)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RaSt92/RESTful-API.git"
+  },
+  "keywords": [
+    "node",
+    "restful",
+    "api"
+  ],
+  "author": "Rado Stoychev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RaSt92/RESTful-API/issues"
+  },
+  "homepage": "https://github.com/RaSt92/RESTful-API#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
