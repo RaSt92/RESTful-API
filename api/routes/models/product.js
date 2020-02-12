@@ -8,7 +8,8 @@ const productSchema = mongoose.Schema({
     price: {
         type: Number,
         required: true
-    }
+    },
+    pdocutImage: {type: String, required: true}
 });
 
 module.exports = mongoose.model('Product', productSchema);
