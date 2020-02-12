@@ -2,9 +2,12 @@ const express = require('express');
 const router =  express.Router();
 const mongoose = require('mongoose');
 const user = require('../models/user');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 router.post('/signup', (req, res, next)=>{
-    user.find({email: req.body.email}).exec().then(user => {
+    user.find({email: req.body.email})
+    .exec()
+    .then(user => {
         if(user){
             return res.status(409).json({
                 message: 'Email exists'
@@ -41,6 +44,43 @@ router.post('/signup', (req, res, next)=>{
     .catch();
     
 });
+router.post('/login', (req, res, next)=>{
+    user.find({email: req.body.email})
+    .exec()
+    .then(user=>{
+        if(user.length < 1){
+            return res.status(401).json({
+                message:'Auth failed'
+            });
+        }
+        bcrypt.compare(req.body.password, user[0].password, (err, res)=>{
+            if(err){
+                return res.status(401).json({
+                    message: 'Auth failed'
+                })
+            }
+            if(result){
+                jwt.sign({
+                    email: user[0].email,
+                    userId: user[0]._id
+                }, process.env.JWT_KEY,
+                    {
+                        expiresIn: '1hr'
+                    })
+                return res.status(200).json({
+                    message: 'Auth successful',
+                    token: token
+                })
+            }
+        })
+    })
+    .catch(err=>{
+        console.log(err)
+        res.status(500).json({
+            error: err
+        })
+    })
+})
 router.delete('/:userId', (req,res,next)=>{
     user.remove({_id: req.params.userId})
     .exec()
