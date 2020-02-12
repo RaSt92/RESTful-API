@@ -1,6 +1,5 @@
 const express = require('express');
 const router =  express.Router();
-const mongoose = require('mongoose');
 const multer = require('multer');
 const checkAuth = require('../middleware/check-auth');
 const ProductsController = require('../controllers/products');
@@ -28,8 +27,6 @@ const upload = multer({
     },
     fileFilter: fileFilter
 });
-
-const Product = require('..routes/models/product');
 
 router.get('/:productId', ProductsController.products_get_all);
 router.post('/', checkAuth, upload.single('productImage'), ProductsController.products_create_products)
