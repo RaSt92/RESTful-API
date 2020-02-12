@@ -2,6 +2,8 @@ const express = require('express');
 const router =  express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
+const checkAuth = require('../middleware/check-auth');
+
 const storage = multer.diskStorage({
     destination: function(req,file,cb){
         cb(null, './uploads/');
@@ -28,7 +30,7 @@ const upload = multer({
 
 const Product = require('..routes/models/product');
 
-router.get('/', (req,res,next)=>{
+router.get('/:productId', (req,res,next)=>{
     Product.find()
     .select('name price _id productImage')
     .exec()
@@ -61,7 +63,7 @@ router.get('/', (req,res,next)=>{
         });
     });
 });
-router.post('/', upload.single('productImage'),(req,res,next)=>{
+router.post('/', checkAuth, upload.single('productImage'), (req,res,next)=>{
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -91,7 +93,7 @@ router.post('/', upload.single('productImage'),(req,res,next)=>{
     });
    
 })
-router.patch('/:productId', (req,res,next)=>{
+router.patch('/:productId', checkAuth, (req,res,next)=>{
     const id = req.params.productId;
     Product.findById(id)
     .select('name price _id productImage')
@@ -139,7 +141,7 @@ router.patch('/:productId', (req,res,next)=>{
         });
     }));
 });
-router.delete('/:productId', (req,res,next)=>{
+router.delete('/:productId', checkAuth,(req,res,next)=>{
     const id = req.params.productId;
     Product.remove({_id: id}).exec()
     .then(result =>{
