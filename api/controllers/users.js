@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const User = require('../models/user');
+const user = require('../models/user');
 
 exports.user_signup = (req, res, next)=>{
     user.find({email: req.body.email})
